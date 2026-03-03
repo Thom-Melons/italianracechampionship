@@ -1,625 +1,349 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Italian Race Championship — F1 25</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,800;0,900;1,800;1,900&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --black:   #1a1a1a;
-      --dark:    #202020;
-      --card:    #262626;
-      --border:  #303030;
-      --green:   #009246;
-      --red-it:  #ce2b37;
-      --white:   #f0ece4;
-      --blue:    #00C0DF;
-      --blue-dk: #0099b8;
-      --dim:     #888;
-    }
-
-    html { scroll-behavior: smooth; }
-    body { background: var(--black); color: var(--white); font-family: 'Barlow', sans-serif; font-weight: 300; overflow-x: hidden; }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--black); }
-    ::-webkit-scrollbar-thumb { background: var(--blue); }
-
-    /* ══ NAVBAR ══ */
-    nav {
-      position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 4rem; height: 68px;
-      background: rgba(26,26,26,0.96);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-    }
-    nav::before {
-      content: '';
-      position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-      background: linear-gradient(90deg, var(--green) 33.3%, var(--white) 33.3% 66.6%, var(--red-it) 66.6%);
-    }
-    .nav-logo { text-decoration: none; display: flex; align-items: center; gap: 0.75rem; }
-    .nav-logo img { height: 36px; object-fit: contain; }
-    .nav-logo-text {
-      font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic;
-      font-size: 1rem; letter-spacing: 0.1em; color: var(--white);
-    }
-    .nav-links { display: flex; align-items: center; gap: 2.2rem; list-style: none; }
-    .nav-links a {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--dim); text-decoration: none; transition: color .2s; position: relative;
-    }
-    .nav-links a::after {
-      content: ''; position: absolute; bottom: -4px; left: 0;
-      width: 0; height: 1px; background: var(--blue); transition: width .3s ease;
-    }
-    .nav-links a:hover { color: var(--white); }
-    .nav-links a:hover::after { width: 100%; }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
-    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: .3s; }
-
-    /* ══ HERO ══ */
-    .hero {
-      min-height: 100vh; display: flex; align-items: center;
-      position: relative; overflow: hidden; padding: 0 4rem;
-    }
-    /* Subtle grid only, no flag stripes */
-    .hero::after {
-      content: ''; position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,.014) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px);
-      background-size: 60px 60px; pointer-events: none;
-    }
-    /* Italian flag — right side, compact vertical stripes */
-    .hero::before {
-      content: ''; position: absolute; top: 0; right: 0; width: 18%; height: 100%;
-      background: linear-gradient(90deg,
-        rgba(0,146,70,.09)   0%,  rgba(0,146,70,.09)   33.3%,
-        rgba(240,236,228,.06) 33.3%, rgba(240,236,228,.06) 66.6%,
-        rgba(206,43,55,.09)  66.6%, rgba(206,43,55,.09)  100%
-      );
-      pointer-events: none;
-    }
-    .hero-content { position: relative; z-index: 2; max-width: 760px; }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(28px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-    .hero-logo { margin-bottom: 2rem; animation: fadeUp .9s ease both; }
-    .hero-logo img { height: 68px; object-fit: contain; }
-    .hero-label {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.35em; text-transform: uppercase;
-      color: var(--blue); display: flex; align-items: center; gap: 0.8rem;
-      margin-bottom: 1.2rem; animation: fadeUp .9s .1s ease both;
-    }
-    .hero-label::before { content: ''; display: block; width: 32px; height: 1px; background: var(--blue); }
-    .hero-title {
-      font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic;
-      font-size: clamp(3.8rem, 9vw, 8.5rem); line-height: .92; letter-spacing: 0.02em; color: var(--white);
-      animation: fadeUp .9s .2s ease both;
-    }
-    .hero-title .outline { -webkit-text-stroke: 1px rgba(240,236,228,.28); color: transparent; }
-    .hero-title .accent  { color: var(--blue); }
-    .hero-sub {
-      margin-top: 1.8rem; font-size: 1.05rem; font-weight: 300;
-      color: var(--dim); max-width: 480px; line-height: 1.7;
-      animation: fadeUp .9s .35s ease both;
-    }
-    .hero-actions { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp .9s .45s ease both; }
-    .btn-primary {
-      font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 700;
-      letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); background: var(--blue);
-      padding: 0.9rem 2.2rem; text-decoration: none; transition: background .2s, transform .2s; display: inline-block;
-    }
-    .btn-primary:hover { background: var(--blue-dk); transform: translateY(-2px); }
-    .btn-ghost {
-      font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 600;
-      letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); border: 1px solid var(--border);
-      padding: 0.9rem 2.2rem; text-decoration: none; transition: border-color .2s, color .2s; display: inline-block;
-    }
-    .btn-ghost:hover { border-color: var(--white); color: var(--white); }
-    .hero-stats {
-      position: absolute; bottom: 3rem; left: 4rem;
-      display: flex; gap: 3rem; animation: fadeUp .9s .6s ease both; z-index: 2;
-    }
-    .stat-num { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 2.4rem; letter-spacing: 0.02em; line-height: 1; color: var(--white); }
-    .stat-num span { color: var(--blue); font-size: 1.4rem; }
-    .stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); margin-top: 0.2rem; }
-    .hero-season {
-      position: absolute; right: 0; top: 0;
-      width: 18%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 2; pointer-events: none;
-    }
-    .hero-season span {
-      display: block;
-      transform: rotate(90deg);
-      white-space: nowrap;
-      font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic;
-      font-size: 0.75rem; letter-spacing: 0.5em;
-      color: rgba(255,255,255,.13);
-    }
-
-    /* ══ MARQUEE ══ */
-    .marquee-strip { background: var(--blue); padding: 0.65rem 0; overflow: hidden; white-space: nowrap; }
-    .marquee-inner { display: inline-flex; gap: 3rem; animation: marquee 22s linear infinite; }
-    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    .marquee-item { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,.9); }
-    .marquee-sep { color: rgba(255,255,255,.4); }
-
-    /* ══ SECTION BASE ══ */
-    section { padding: 6rem 4rem; }
-    .section-label {
-      font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 0.4em; text-transform: uppercase; color: var(--blue);
-      display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;
-    }
-    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--blue); }
-    .section-title { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: clamp(2.2rem, 5vw, 4rem); letter-spacing: 0.02em; line-height: 1; color: var(--white); margin-bottom: 2rem; }
-
-    /* ══ CATEGORY TABS ══ */
-    .cat-tabs {
-      display: flex; gap: 0; margin-bottom: 2.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .cat-tab {
-      font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; font-weight: 700;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--dim); padding: 0.7rem 1.8rem;
-      cursor: pointer; border: none; background: none;
-      border-bottom: 2px solid transparent; margin-bottom: -1px;
-      transition: color .2s, border-color .2s;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .cat-tab .tab-badge {
-      font-size: 0.6rem; padding: 1px 5px;
-      border: 1px solid currentColor; border-radius: 3px;
-      opacity: .6;
-    }
-    .cat-tab:hover { color: var(--white); }
-    .cat-tab.active { color: var(--white); border-bottom-color: var(--blue); }
-    .cat-pane { display: none; }
-    .cat-pane.active { display: block; }
-
-    /* ══ CLASSIFICA ══ */
-    #classifica { background: var(--dark); }
-    .standings-table { width: 100%; border-collapse: collapse; }
-    .standings-table thead tr { border-bottom: 1px solid var(--border); }
-    .standings-table th { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dim); padding: 0.5rem 1rem; text-align: left; }
-    .standings-table td { padding: 0.9rem 1rem; font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 400; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: middle; }
-    .standings-table tbody tr { transition: background .2s; }
-    .standings-table tbody tr:hover { background: rgba(255,255,255,.03); }
-    .pos-num { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 1.3rem; color: var(--dim); width: 50px; }
-    .pos-num.top { color: var(--blue); }
-    .t-driver-name { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 1.1rem; letter-spacing: 0.04em; color: var(--white); }
-    .t-driver-team { font-size: 0.75rem; color: var(--dim); font-weight: 300; display: block; margin-top: 1px; }
-    .driver-flag { font-size: 1rem; margin-right: 6px; }
-    .pts { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 1.5rem; color: var(--white); text-align: right; }
-    .team-color-bar { width: 3px; height: 30px; border-radius: 2px; }
-
-    /* ══ CALENDARIO ══ */
-    #calendario { background: var(--black); }
-    .races-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--border); }
-    .race-card { background: var(--card); padding: 1.6rem; position: relative; overflow: hidden; transition: background .2s; cursor: default; }
-    .race-card:hover { background: #2c2c2c; }
-    .race-card.next { border-top: 2px solid var(--blue); }
-    .race-card.next::before { content: 'PROSSIMA GARA'; font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.3em; color: var(--blue); position: absolute; top: .9rem; right: 1rem; }
-    .race-card.done { opacity: .45; }
-    .race-card.double-pts { border-left: 3px solid gold; }
-    .race-card.double-pts::after { content: '2× PUNTI'; font-family: 'Barlow Condensed', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.25em; color: gold; position: absolute; bottom: .9rem; left: 1rem; }
-    .race-round { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.3em; color: var(--dim); text-transform: uppercase; margin-bottom: 0.4rem; }
-    .race-name { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 1.4rem; letter-spacing: 0.02em; line-height: 1.1; color: var(--white); margin-bottom: 0.3rem; }
-    .race-circuit { font-size: 0.8rem; color: var(--dim); font-weight: 300; }
-    .race-date { margin-top: 1rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--dim); letter-spacing: 0.1em; }
-    .race-flag { position: absolute; bottom: 1.2rem; right: 1.2rem; font-size: 1.6rem; opacity: .28; }
-
-    /* ══ PILOTI ══ */
-    #piloti { background: var(--dark); }
-    .drivers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1px; background: var(--border); }
-    .driver-card { background: var(--card); padding: 1.8rem 1.4rem; text-align: center; position: relative; transition: background .2s; cursor: default; overflow: hidden; }
-    .driver-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; transform: scaleX(0); transform-origin: left; transition: transform .3s; }
-    .driver-card:hover { background: #2c2c2c; }
-    .driver-card:hover::after { transform: scaleX(1); }
-    .driver-card[data-team="Ferrari"]::after      { background: #e8002d; }
-    .driver-card[data-team="McLaren"]::after      { background: #FF8000; }
-    .driver-card[data-team="Red Bull"]::after     { background: #3671C6; }
-    .driver-card[data-team="Mercedes"]::after     { background: #27F4D2; }
-    .driver-card[data-team="Aston Martin"]::after { background: #229971; }
-    .driver-card[data-team="Alpine"]::after       { background: #FF87BC; }
-    .driver-card[data-team="Williams"]::after     { background: #64C4FF; }
-    .driver-card[data-team="Haas"]::after         { background: #B6BABD; }
-    .driver-card[data-team="Kick Sauber"]::after  { background: #52E252; }
-    .driver-card[data-team="Racing Bulls"]::after { background: #6692FF; }
-    .driver-num-bg { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 3.5rem; line-height: 1; color: rgba(255,255,255,.05); position: absolute; top: .4rem; right: .6rem; }
-    .driver-avatar { width: 58px; height: 58px; border-radius: 50%; background: var(--border); margin: 0 auto .9rem; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
-    .driver-card .t-driver-name { font-size: 1.1rem; }
-    .driver-card .t-driver-team { margin-top: .25rem; }
-    .driver-pts { margin-top: .9rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.2em; color: var(--dim); }
-    .driver-pts strong { color: var(--white); font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 1rem; }
-
-    /* ══ TEAM ══ */
-    #team { background: var(--black); }
-    .teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; background: var(--border); }
-    .team-card { background: var(--card); padding: 1.5rem; border-left: 3px solid transparent; transition: background .2s; }
-    .team-card:hover { background: #2c2c2c; }
-    .team-card-name { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 1.3rem; color: var(--white); margin-bottom: 0.3rem; }
-    .team-card-drivers { font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; color: var(--dim); line-height: 1.6; }
-    .team-pts-row { margin-top: .9rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--dim); }
-
-    /* ══ REGOLAMENTO ══ */
-    #regolamento { background: var(--dark); }
-    .rules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1px; background: var(--border); }
-    .rule-card { background: var(--card); padding: 2rem; }
-    .rule-num { font-family: 'Exo 2', sans-serif; font-weight: 900; font-style: italic; font-size: 2.5rem; color: rgba(0,192,223,.15); line-height: 1; margin-bottom: 0.8rem; }
-    .rule-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white); margin-bottom: 0.5rem; }
-    .rule-text { font-size: 0.88rem; color: var(--dim); font-weight: 300; line-height: 1.65; }
-
-    /* ══ FOOTER ══ */
-    footer { background: var(--dark); border-top: 1px solid var(--border); padding: 3rem 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
-    .footer-copy { font-size: 0.8rem; color: var(--dim); font-weight: 300; }
-    .tricolore { width: 48px; height: 6px; background: linear-gradient(90deg, var(--green) 33.3%, var(--white) 33.3% 66.6%, var(--red-it) 66.6%); }
-
-    /* ══ MOBILE ══ */
-    @media (max-width: 768px) {
-      nav { padding: 0 1.5rem; }
-      .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 68px; left: 0; width: 100%; background: var(--dark); border-bottom: 1px solid var(--border); }
-      .nav-links.open { display: flex; }
-      .nav-links li { border-bottom: 1px solid var(--border); }
-      .nav-links a { display: block; padding: 1rem 1.5rem; }
-      .hamburger { display: flex; }
-      .hero { padding: 7rem 1.5rem 6rem; }
-      .hero-stats { left: 1.5rem; gap: 1.8rem; flex-wrap: wrap; }
-      .hero-season { display: none; }
-      section { padding: 4rem 1.5rem; }
-      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
-      .standings-table th:nth-child(4), .standings-table td:nth-child(4) { display: none; }
-      .cat-tab { padding: 0.6rem 1rem; font-size: 0.75rem; }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Italian Race Championship — F1 25</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,800;0,900;1,800;1,900&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav id="navbar">
-    <a href="#" class="nav-logo">
-      <img src="logo-compact.png" alt="IRC" />
-      <span class="nav-logo-text">Italian Race Championship</span>
-    </a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#classifica">Classifica</a></li>
-      <li><a href="#calendario">Calendario</a></li>
-      <li><a href="#piloti">Piloti</a></li>
-      <li><a href="#team">Team</a></li>
-      <li><a href="#regolamento">Regolamento</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <a href="#" class="nav-logo">
+            <img src="IRC_completo_white.png" alt="IRC" />
+            <span class="nav-logo-text">Italian Race Championship</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#classifica">Classifica</a></li>
+            <li><a href="#calendario">Calendario</a></li>
+            <li><a href="#piloti">Piloti</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#regolamento">Regolamento</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <div class="hero-logo">
-        <img src="logo-extended.png" alt="Italian Race Championship" />
-      </div>
-      <div class="hero-label">F1 &amp; F2 — Stagione 2 &nbsp;·&nbsp; F3 — Stagione 1 &nbsp;·&nbsp; F1 25</div>
-      <h1 class="hero-title">
-        Italian<br>
-        <span class="outline" style="-webkit-text-stroke:0;color:var(--white);">Race</span><br>
-        <span class="accent">Championship</span>
-      </h1>
-      <p class="hero-sub">
-        Il campionato online di Formula 1 più competitivo d'Italia. Tre categorie, undici round, una sola corona.
-      </p>
-      <div class="hero-actions">
-        <a href="#classifica" class="btn-primary">Classifica ↓</a>
-        <a href="#calendario" class="btn-ghost">Prossima Gara</a>
-      </div>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">3</div>
-        <div class="stat-label">Categorie</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">11</div>
-        <div class="stat-label">Round</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">10</div>
-        <div class="stat-label">Team</div>
-      </div>
-    </div>
-    <div class="hero-season"><span>Italian Race Championship — Stagione 2026 — F1 25</span></div>
-  </section>
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-logo">
+                <img src="IRC_acronimo_white.png" alt="Italian Race Championship" />
+            </div>
+            <div class="hero-label">F1 &amp; F2 — Stagione 2 &nbsp;·&nbsp; F3 — Stagione 1 &nbsp;·&nbsp; F1 25</div>
+            <h1 class="hero-title">
+                Italian<br>
+                <span class="outline" style="-webkit-text-stroke:0;color:var(--white);">Race</span><br>
+                <span class="accent">Championship</span>
+            </h1>
+            <p class="hero-sub">
+                Il campionato online di Formula 1 più competitivo d'Italia. Tre categorie, undici round, una sola corona.
+            </p>
+            <div class="hero-actions">
+                <a href="#classifica" class="btn-primary">Classifica ↓</a>
+                <a href="#calendario" class="btn-ghost">Prossima Gara</a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-num">3</div>
+                <div class="stat-label">Categorie</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">11</div>
+                <div class="stat-label">Round</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">10</div>
+                <div class="stat-label">Team</div>
+            </div>
+        </div>
+        <div class="hero-season"><span>Italian Race Championship — Stagione 2026 — F1 25</span></div>
+    </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee-strip">
-    <div class="marquee-inner">
-      <span class="marquee-item">Italian Race Championship</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">Stagione 2026</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">F1 25</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">F1 · Venerdì ore 21:00</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">F2 · Giovedì ore 21:00</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">F3 · Martedì ore 21:00</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">Italian Race Championship</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">Stagione 2026</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">F1 25</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">F1 · Venerdì ore 21:00</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">F2 · Giovedì ore 21:00</span>
-      <span class="marquee-sep">✦</span>
-      <span class="marquee-item">F3 · Martedì ore 21:00</span>
-      <span class="marquee-sep">✦</span>
-    </div>
-  </div>
-
-  <!-- CLASSIFICA -->
-  <section id="classifica">
-    <div class="section-label">F1 &amp; F2 Stagione 2 · F3 Stagione 1</div>
-    <h2 class="section-title">Classifica Generale</h2>
-    <div class="cat-tabs">
-      <button class="cat-tab active" data-target="cls-f1">F1 <span class="tab-badge">S2 · VEN 21:00</span></button>
-      <button class="cat-tab" data-target="cls-f2">F2 <span class="tab-badge">S2 · GIO 21:00</span></button>
-      <button class="cat-tab" data-target="cls-f3">F3 <span class="tab-badge">S1 · MAR 21:00</span></button>
+    <!-- MARQUEE -->
+    <div class="marquee-strip">
+        <div class="marquee-inner">
+            <span class="marquee-item">Italian Race Championship</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">Stagione 2026</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">F1 25</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">F1 · Venerdì ore 21:00</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">F2 · Giovedì ore 21:00</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">F3 · Martedì ore 21:00</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">Italian Race Championship</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">Stagione 2026</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">F1 25</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">F1 · Venerdì ore 21:00</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">F2 · Giovedì ore 21:00</span>
+            <span class="marquee-sep">✦</span>
+            <span class="marquee-item">F3 · Martedì ore 21:00</span>
+            <span class="marquee-sep">✦</span>
+        </div>
     </div>
 
-    <!-- F1 -->
-    <div class="cat-pane active" id="cls-f1">
-      <table class="standings-table">
-        <thead><tr><th style="width:50px">Pos</th><th style="width:16px"></th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead>
-        <tbody>
-          <tr><td class="pos-num top">1</td><td><div class="team-color-bar" style="background:#e8002d"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Ferrari</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Ferrari</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num top">2</td><td><div class="team-color-bar" style="background:#FF8000"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">McLaren</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">McLaren</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num top">3</td><td><div class="team-color-bar" style="background:#3671C6"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Red Bull Racing</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Red Bull</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num">4</td><td><div class="team-color-bar" style="background:#27F4D2"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Mercedes</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Mercedes</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num">5</td><td><div class="team-color-bar" style="background:#229971"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Aston Martin</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Aston Martin</td><td class="pts">—</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- CLASSIFICA -->
+    <section id="classifica">
+        <div class="section-label">F1 &amp; F2 Stagione 2 · F3 Stagione 1</div>
+        <h2 class="section-title">Classifica Generale</h2>
+        <div class="cat-tabs">
+            <button class="cat-tab active" data-target="cls-f1">F1 <span class="tab-badge">S2 · VEN 21:00</span></button>
+            <button class="cat-tab" data-target="cls-f2">F2 <span class="tab-badge">S2 · GIO 21:00</span></button>
+            <button class="cat-tab" data-target="cls-f3">F3 <span class="tab-badge">S1 · MAR 21:00</span></button>
+        </div>
 
-    <!-- F2 -->
-    <div class="cat-pane" id="cls-f2">
-      <table class="standings-table">
-        <thead><tr><th style="width:50px">Pos</th><th style="width:16px"></th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead>
-        <tbody>
-          <tr><td class="pos-num top">1</td><td><div class="team-color-bar" style="background:#FF87BC"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Alpine</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Alpine</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num top">2</td><td><div class="team-color-bar" style="background:#64C4FF"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Williams</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Williams</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num top">3</td><td><div class="team-color-bar" style="background:#B6BABD"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Haas</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Haas</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num">4</td><td><div class="team-color-bar" style="background:#52E252"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Kick Sauber</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Kick Sauber</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num">5</td><td><div class="team-color-bar" style="background:#6692FF"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Racing Bulls</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Racing Bulls</td><td class="pts">—</td></tr>
-        </tbody>
-      </table>
-    </div>
+        <!-- F1 -->
+        <div class="cat-pane active" id="cls-f1">
+            <table class="standings-table">
+                <thead><tr><th style="width:50px">Pos</th><th style="width:16px"></th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead>
+                <tbody>
+                    <tr><td class="pos-num top">1</td><td><div class="team-color-bar" style="background:#e8002d"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Ferrari</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Ferrari</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num top">2</td><td><div class="team-color-bar" style="background:#FF8000"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">McLaren</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">McLaren</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num top">3</td><td><div class="team-color-bar" style="background:#3671C6"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Red Bull Racing</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Red Bull</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num">4</td><td><div class="team-color-bar" style="background:#27F4D2"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Mercedes</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Mercedes</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num">5</td><td><div class="team-color-bar" style="background:#229971"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Aston Martin</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Aston Martin</td><td class="pts">—</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-    <!-- F3 -->
-    <div class="cat-pane" id="cls-f3">
-      <table class="standings-table">
-        <thead><tr><th style="width:50px">Pos</th><th style="width:16px"></th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead>
-        <tbody>
-          <tr><td class="pos-num top">1</td><td><div class="team-color-bar" style="background:#e8002d"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Ferrari</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Ferrari</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num top">2</td><td><div class="team-color-bar" style="background:#FF8000"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">McLaren</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">McLaren</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num top">3</td><td><div class="team-color-bar" style="background:#3671C6"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Red Bull Racing</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Red Bull</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num">4</td><td><div class="team-color-bar" style="background:#27F4D2"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Mercedes</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Mercedes</td><td class="pts">—</td></tr>
-          <tr><td class="pos-num">5</td><td><div class="team-color-bar" style="background:#229971"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Aston Martin</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Aston Martin</td><td class="pts">—</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+        <!-- F2 -->
+        <div class="cat-pane" id="cls-f2">
+            <table class="standings-table">
+                <thead><tr><th style="width:50px">Pos</th><th style="width:16px"></th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead>
+                <tbody>
+                    <tr><td class="pos-num top">1</td><td><div class="team-color-bar" style="background:#FF87BC"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Alpine</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Alpine</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num top">2</td><td><div class="team-color-bar" style="background:#64C4FF"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Williams</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Williams</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num top">3</td><td><div class="team-color-bar" style="background:#B6BABD"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Haas</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Haas</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num">4</td><td><div class="team-color-bar" style="background:#52E252"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Kick Sauber</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Kick Sauber</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num">5</td><td><div class="team-color-bar" style="background:#6692FF"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Racing Bulls</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Racing Bulls</td><td class="pts">—</td></tr>
+                </tbody>
+            </table>
+        </div>
 
-  <!-- CALENDARIO -->
-  <section id="calendario">
-    <div class="section-label">Stagione 2026</div>
-    <h2 class="section-title">Calendario Gare</h2>
-    <div class="cat-tabs">
-      <button class="cat-tab active" data-target="cal-f1">F1 <span class="tab-badge">S2 · VEN 21:00</span></button>
-      <button class="cat-tab" data-target="cal-f2">F2 <span class="tab-badge">S2 · GIO 21:00</span></button>
-      <button class="cat-tab" data-target="cal-f3">F3 <span class="tab-badge">S1 · MAR 21:00</span></button>
-    </div>
+        <!-- F3 -->
+        <div class="cat-pane" id="cls-f3">
+            <table class="standings-table">
+                <thead><tr><th style="width:50px">Pos</th><th style="width:16px"></th><th>Pilota</th><th>Scuderia</th><th style="text-align:right">Punti</th></tr></thead>
+                <tbody>
+                    <tr><td class="pos-num top">1</td><td><div class="team-color-bar" style="background:#e8002d"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Ferrari</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Ferrari</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num top">2</td><td><div class="team-color-bar" style="background:#FF8000"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">McLaren</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">McLaren</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num top">3</td><td><div class="team-color-bar" style="background:#3671C6"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Red Bull Racing</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Red Bull</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num">4</td><td><div class="team-color-bar" style="background:#27F4D2"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Mercedes</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Mercedes</td><td class="pts">—</td></tr>
+                    <tr><td class="pos-num">5</td><td><div class="team-color-bar" style="background:#229971"></div></td><td><span class="driver-flag">🇮🇹</span><span class="t-driver-name">DA AGGIUNGERE</span><span class="t-driver-team">Aston Martin</span></td><td style="color:var(--dim);font-family:'Barlow Condensed',sans-serif;font-size:.88rem;">Aston Martin</td><td class="pts">—</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-    <!-- F1 Calendar -->
-    <div class="cat-pane active" id="cal-f1">
-      <div class="races-grid">
-        <div class="race-card"><div class="race-round">Round 01</div><div class="race-name">Gran Premio<br>d'Australia</div><div class="race-circuit">Albert Park Circuit</div><div class="race-date">Venerdì, 6 Mar 2026 — 21:00</div><div class="race-flag">🇦🇺</div></div>
-        <div class="race-card"><div class="race-round">Round 02</div><div class="race-name">Gran Premio<br>della Cina</div><div class="race-circuit">Shanghai International</div><div class="race-date">Venerdì, 20 Mar 2026 — 21:00</div><div class="race-flag">🇨🇳</div></div>
-        <div class="race-card"><div class="race-round">Round 03</div><div class="race-name">Gran Premio<br>del Giappone</div><div class="race-circuit">Suzuka International</div><div class="race-date">Venerdì, 3 Apr 2026 — 21:00</div><div class="race-flag">🇯🇵</div></div>
-        <div class="race-card double-pts"><div class="race-round">Round 04</div><div class="race-name">Gran Premio<br>di Bahrain</div><div class="race-circuit">Bahrain International</div><div class="race-date">Venerdì, 17 Apr 2026 — 21:00</div><div class="race-flag">🇧🇭</div></div>
-        <div class="race-card next"><div class="race-round">Round 05</div><div class="race-name">Gran Premio<br>di Monaco</div><div class="race-circuit">Circuit de Monaco</div><div class="race-date">Venerdì, 8 Mag 2026 — 21:00</div><div class="race-flag">🇲🇨</div></div>
-        <div class="race-card"><div class="race-round">Round 06</div><div class="race-name">Gran Premio<br>di Spagna</div><div class="race-circuit">Circuit de Catalunya</div><div class="race-date">Venerdì, 22 Mag 2026 — 21:00</div><div class="race-flag">🇪🇸</div></div>
-        <div class="race-card"><div class="race-round">Round 07</div><div class="race-name">Gran Premio<br>del Canada</div><div class="race-circuit">Circuit Gilles Villeneuve</div><div class="race-date">Venerdì, 5 Giu 2026 — 21:00</div><div class="race-flag">🇨🇦</div></div>
-        <div class="race-card"><div class="race-round">Round 08</div><div class="race-name">Gran Premio<br>di Gran Bretagna</div><div class="race-circuit">Silverstone Circuit</div><div class="race-date">Venerdì, 3 Lug 2026 — 21:00</div><div class="race-flag">🇬🇧</div></div>
-        <div class="race-card"><div class="race-round">Round 09</div><div class="race-name">Gran Premio<br>d'Ungheria</div><div class="race-circuit">Hungaroring</div><div class="race-date">Venerdì, 17 Lug 2026 — 21:00</div><div class="race-flag">🇭🇺</div></div>
-        <div class="race-card"><div class="race-round">Round 10</div><div class="race-name">Gran Premio<br>d'Italia</div><div class="race-circuit">Autodromo di Monza</div><div class="race-date">Venerdì, 4 Set 2026 — 21:00</div><div class="race-flag">🇮🇹</div></div>
-        <div class="race-card"><div class="race-round">Round 11</div><div class="race-name">Gran Premio<br>di Abu Dhabi</div><div class="race-circuit">Yas Marina Circuit</div><div class="race-date">Venerdì, 27 Nov 2026 — 21:00</div><div class="race-flag">🇦🇪</div></div>
-      </div>
-    </div>
+    <!-- CALENDARIO -->
+    <section id="calendario">
+        <div class="section-label">Stagione 2026</div>
+        <h2 class="section-title">Calendario Gare</h2>
+        <div class="cat-tabs">
+            <button class="cat-tab active" data-target="cal-f1">F1 <span class="tab-badge">S2 · VEN 21:00</span></button>
+            <button class="cat-tab" data-target="cal-f2">F2 <span class="tab-badge">S2 · GIO 21:00</span></button>
+            <button class="cat-tab" data-target="cal-f3">F3 <span class="tab-badge">S1 · MAR 21:00</span></button>
+        </div>
 
-    <!-- F2 Calendar -->
-    <div class="cat-pane" id="cal-f2">
-      <div class="races-grid">
-        <div class="race-card"><div class="race-round">Round 01</div><div class="race-name">Gran Premio<br>d'Australia</div><div class="race-circuit">Albert Park Circuit</div><div class="race-date">Giovedì, 5 Mar 2026 — 21:00</div><div class="race-flag">🇦🇺</div></div>
-        <div class="race-card"><div class="race-round">Round 02</div><div class="race-name">Gran Premio<br>della Cina</div><div class="race-circuit">Shanghai International</div><div class="race-date">Giovedì, 19 Mar 2026 — 21:00</div><div class="race-flag">🇨🇳</div></div>
-        <div class="race-card"><div class="race-round">Round 03</div><div class="race-name">Gran Premio<br>del Giappone</div><div class="race-circuit">Suzuka International</div><div class="race-date">Giovedì, 2 Apr 2026 — 21:00</div><div class="race-flag">🇯🇵</div></div>
-        <div class="race-card double-pts"><div class="race-round">Round 04</div><div class="race-name">Gran Premio<br>di Bahrain</div><div class="race-circuit">Bahrain International</div><div class="race-date">Giovedì, 16 Apr 2026 — 21:00</div><div class="race-flag">🇧🇭</div></div>
-        <div class="race-card next"><div class="race-round">Round 05</div><div class="race-name">Gran Premio<br>di Monaco</div><div class="race-circuit">Circuit de Monaco</div><div class="race-date">Giovedì, 7 Mag 2026 — 21:00</div><div class="race-flag">🇲🇨</div></div>
-        <div class="race-card"><div class="race-round">Round 06</div><div class="race-name">Gran Premio<br>di Spagna</div><div class="race-circuit">Circuit de Catalunya</div><div class="race-date">Giovedì, 21 Mag 2026 — 21:00</div><div class="race-flag">🇪🇸</div></div>
-        <div class="race-card"><div class="race-round">Round 07</div><div class="race-name">Gran Premio<br>del Canada</div><div class="race-circuit">Circuit Gilles Villeneuve</div><div class="race-date">Giovedì, 4 Giu 2026 — 21:00</div><div class="race-flag">🇨🇦</div></div>
-        <div class="race-card"><div class="race-round">Round 08</div><div class="race-name">Gran Premio<br>di Gran Bretagna</div><div class="race-circuit">Silverstone Circuit</div><div class="race-date">Giovedì, 2 Lug 2026 — 21:00</div><div class="race-flag">🇬🇧</div></div>
-        <div class="race-card"><div class="race-round">Round 09</div><div class="race-name">Gran Premio<br>d'Ungheria</div><div class="race-circuit">Hungaroring</div><div class="race-date">Giovedì, 16 Lug 2026 — 21:00</div><div class="race-flag">🇭🇺</div></div>
-        <div class="race-card"><div class="race-round">Round 10</div><div class="race-name">Gran Premio<br>d'Italia</div><div class="race-circuit">Autodromo di Monza</div><div class="race-date">Giovedì, 3 Set 2026 — 21:00</div><div class="race-flag">🇮🇹</div></div>
-        <div class="race-card"><div class="race-round">Round 11</div><div class="race-name">Gran Premio<br>di Abu Dhabi</div><div class="race-circuit">Yas Marina Circuit</div><div class="race-date">Giovedì, 26 Nov 2026 — 21:00</div><div class="race-flag">🇦🇪</div></div>
-      </div>
-    </div>
+        <!-- F1 Calendar -->
+        <div class="cat-pane active" id="cal-f1">
+            <div class="races-grid">
+                <div class="race-card"><div class="race-round">Round 01</div><div class="race-name">Gran Premio<br>d'Australia</div><div class="race-circuit">Albert Park Circuit</div><div class="race-date">Venerdì, 6 Mar 2026 — 21:00</div><div class="race-flag">🇦🇺</div></div>
+                <div class="race-card"><div class="race-round">Round 02</div><div class="race-name">Gran Premio<br>della Cina</div><div class="race-circuit">Shanghai International</div><div class="race-date">Venerdì, 20 Mar 2026 — 21:00</div><div class="race-flag">🇨🇳</div></div>
+                <div class="race-card"><div class="race-round">Round 03</div><div class="race-name">Gran Premio<br>del Giappone</div><div class="race-circuit">Suzuka International</div><div class="race-date">Venerdì, 3 Apr 2026 — 21:00</div><div class="race-flag">🇯🇵</div></div>
+                <div class="race-card double-pts"><div class="race-round">Round 04</div><div class="race-name">Gran Premio<br>di Bahrain</div><div class="race-circuit">Bahrain International</div><div class="race-date">Venerdì, 17 Apr 2026 — 21:00</div><div class="race-flag">🇧🇭</div></div>
+                <div class="race-card next"><div class="race-round">Round 05</div><div class="race-name">Gran Premio<br>di Monaco</div><div class="race-circuit">Circuit de Monaco</div><div class="race-date">Venerdì, 8 Mag 2026 — 21:00</div><div class="race-flag">🇲🇨</div></div>
+                <div class="race-card"><div class="race-round">Round 06</div><div class="race-name">Gran Premio<br>di Spagna</div><div class="race-circuit">Circuit de Catalunya</div><div class="race-date">Venerdì, 22 Mag 2026 — 21:00</div><div class="race-flag">🇪🇸</div></div>
+                <div class="race-card"><div class="race-round">Round 07</div><div class="race-name">Gran Premio<br>del Canada</div><div class="race-circuit">Circuit Gilles Villeneuve</div><div class="race-date">Venerdì, 5 Giu 2026 — 21:00</div><div class="race-flag">🇨🇦</div></div>
+                <div class="race-card"><div class="race-round">Round 08</div><div class="race-name">Gran Premio<br>di Gran Bretagna</div><div class="race-circuit">Silverstone Circuit</div><div class="race-date">Venerdì, 3 Lug 2026 — 21:00</div><div class="race-flag">🇬🇧</div></div>
+                <div class="race-card"><div class="race-round">Round 09</div><div class="race-name">Gran Premio<br>d'Ungheria</div><div class="race-circuit">Hungaroring</div><div class="race-date">Venerdì, 17 Lug 2026 — 21:00</div><div class="race-flag">🇭🇺</div></div>
+                <div class="race-card"><div class="race-round">Round 10</div><div class="race-name">Gran Premio<br>d'Italia</div><div class="race-circuit">Autodromo di Monza</div><div class="race-date">Venerdì, 4 Set 2026 — 21:00</div><div class="race-flag">🇮🇹</div></div>
+                <div class="race-card"><div class="race-round">Round 11</div><div class="race-name">Gran Premio<br>di Abu Dhabi</div><div class="race-circuit">Yas Marina Circuit</div><div class="race-date">Venerdì, 27 Nov 2026 — 21:00</div><div class="race-flag">🇦🇪</div></div>
+            </div>
+        </div>
 
-    <!-- F3 Calendar -->
-    <div class="cat-pane" id="cal-f3">
-      <div class="races-grid">
-        <div class="race-card"><div class="race-round">Round 01</div><div class="race-name">Gran Premio<br>d'Australia</div><div class="race-circuit">Albert Park Circuit</div><div class="race-date">Martedì, 3 Mar 2026 — 21:00</div><div class="race-flag">🇦🇺</div></div>
-        <div class="race-card"><div class="race-round">Round 02</div><div class="race-name">Gran Premio<br>della Cina</div><div class="race-circuit">Shanghai International</div><div class="race-date">Martedì, 17 Mar 2026 — 21:00</div><div class="race-flag">🇨🇳</div></div>
-        <div class="race-card"><div class="race-round">Round 03</div><div class="race-name">Gran Premio<br>del Giappone</div><div class="race-circuit">Suzuka International</div><div class="race-date">Martedì, 31 Mar 2026 — 21:00</div><div class="race-flag">🇯🇵</div></div>
-        <div class="race-card double-pts"><div class="race-round">Round 04</div><div class="race-name">Gran Premio<br>di Bahrain</div><div class="race-circuit">Bahrain International</div><div class="race-date">Martedì, 14 Apr 2026 — 21:00</div><div class="race-flag">🇧🇭</div></div>
-        <div class="race-card next"><div class="race-round">Round 05</div><div class="race-name">Gran Premio<br>di Monaco</div><div class="race-circuit">Circuit de Monaco</div><div class="race-date">Martedì, 5 Mag 2026 — 21:00</div><div class="race-flag">🇲🇨</div></div>
-        <div class="race-card"><div class="race-round">Round 06</div><div class="race-name">Gran Premio<br>di Spagna</div><div class="race-circuit">Circuit de Catalunya</div><div class="race-date">Martedì, 19 Mag 2026 — 21:00</div><div class="race-flag">🇪🇸</div></div>
-        <div class="race-card"><div class="race-round">Round 07</div><div class="race-name">Gran Premio<br>del Canada</div><div class="race-circuit">Circuit Gilles Villeneuve</div><div class="race-date">Martedì, 2 Giu 2026 — 21:00</div><div class="race-flag">🇨🇦</div></div>
-        <div class="race-card"><div class="race-round">Round 08</div><div class="race-name">Gran Premio<br>di Gran Bretagna</div><div class="race-circuit">Silverstone Circuit</div><div class="race-date">Martedì, 30 Giu 2026 — 21:00</div><div class="race-flag">🇬🇧</div></div>
-        <div class="race-card"><div class="race-round">Round 09</div><div class="race-name">Gran Premio<br>d'Ungheria</div><div class="race-circuit">Hungaroring</div><div class="race-date">Martedì, 14 Lug 2026 — 21:00</div><div class="race-flag">🇭🇺</div></div>
-        <div class="race-card"><div class="race-round">Round 10</div><div class="race-name">Gran Premio<br>d'Italia</div><div class="race-circuit">Autodromo di Monza</div><div class="race-date">Martedì, 1 Set 2026 — 21:00</div><div class="race-flag">🇮🇹</div></div>
-        <div class="race-card"><div class="race-round">Round 11</div><div class="race-name">Gran Premio<br>di Abu Dhabi</div><div class="race-circuit">Yas Marina Circuit</div><div class="race-date">Martedì, 24 Nov 2026 — 21:00</div><div class="race-flag">🇦🇪</div></div>
-      </div>
-    </div>
-  </section>
+        <!-- F2 Calendar -->
+        <div class="cat-pane" id="cal-f2">
+            <div class="races-grid">
+                <div class="race-card"><div class="race-round">Round 01</div><div class="race-name">Gran Premio<br>d'Australia</div><div class="race-circuit">Albert Park Circuit</div><div class="race-date">Giovedì, 5 Mar 2026 — 21:00</div><div class="race-flag">🇦🇺</div></div>
+                <div class="race-card"><div class="race-round">Round 02</div><div class="race-name">Gran Premio<br>della Cina</div><div class="race-circuit">Shanghai International</div><div class="race-date">Giovedì, 19 Mar 2026 — 21:00</div><div class="race-flag">🇨🇳</div></div>
+                <div class="race-card"><div class="race-round">Round 03</div><div class="race-name">Gran Premio<br>del Giappone</div><div class="race-circuit">Suzuka International</div><div class="race-date">Giovedì, 2 Apr 2026 — 21:00</div><div class="race-flag">🇯🇵</div></div>
+                <div class="race-card double-pts"><div class="race-round">Round 04</div><div class="race-name">Gran Premio<br>di Bahrain</div><div class="race-circuit">Bahrain International</div><div class="race-date">Giovedì, 16 Apr 2026 — 21:00</div><div class="race-flag">🇧🇭</div></div>
+                <div class="race-card next"><div class="race-round">Round 05</div><div class="race-name">Gran Premio<br>di Monaco</div><div class="race-circuit">Circuit de Monaco</div><div class="race-date">Giovedì, 7 Mag 2026 — 21:00</div><div class="race-flag">🇲🇨</div></div>
+                <div class="race-card"><div class="race-round">Round 06</div><div class="race-name">Gran Premio<br>di Spagna</div><div class="race-circuit">Circuit de Catalunya</div><div class="race-date">Giovedì, 21 Mag 2026 — 21:00</div><div class="race-flag">🇪🇸</div></div>
+                <div class="race-card"><div class="race-round">Round 07</div><div class="race-name">Gran Premio<br>del Canada</div><div class="race-circuit">Circuit Gilles Villeneuve</div><div class="race-date">Giovedì, 4 Giu 2026 — 21:00</div><div class="race-flag">🇨🇦</div></div>
+                <div class="race-card"><div class="race-round">Round 08</div><div class="race-name">Gran Premio<br>di Gran Bretagna</div><div class="race-circuit">Silverstone Circuit</div><div class="race-date">Giovedì, 2 Lug 2026 — 21:00</div><div class="race-flag">🇬🇧</div></div>
+                <div class="race-card"><div class="race-round">Round 09</div><div class="race-name">Gran Premio<br>d'Ungheria</div><div class="race-circuit">Hungaroring</div><div class="race-date">Giovedì, 16 Lug 2026 — 21:00</div><div class="race-flag">🇭🇺</div></div>
+                <div class="race-card"><div class="race-round">Round 10</div><div class="race-name">Gran Premio<br>d'Italia</div><div class="race-circuit">Autodromo di Monza</div><div class="race-date">Giovedì, 3 Set 2026 — 21:00</div><div class="race-flag">🇮🇹</div></div>
+                <div class="race-card"><div class="race-round">Round 11</div><div class="race-name">Gran Premio<br>di Abu Dhabi</div><div class="race-circuit">Yas Marina Circuit</div><div class="race-date">Giovedì, 26 Nov 2026 — 21:00</div><div class="race-flag">🇦🇪</div></div>
+            </div>
+        </div>
 
-  <!-- PILOTI -->
-  <section id="piloti">
-    <div class="section-label">F1 &amp; F2 Stagione 2 · F3 Stagione 1</div>
-    <h2 class="section-title">I Piloti</h2>
-    <div class="cat-tabs">
-      <button class="cat-tab active" data-target="pil-f1">F1 <span class="tab-badge">S2 · VEN 21:00</span></button>
-      <button class="cat-tab" data-target="pil-f2">F2 <span class="tab-badge">S2 · GIO 21:00</span></button>
-      <button class="cat-tab" data-target="pil-f3">F3 <span class="tab-badge">S1 · MAR 21:00</span></button>
-    </div>
-    <div class="cat-pane active" id="pil-f1">
-      <div class="drivers-grid">
-        <div class="driver-card" data-team="Ferrari"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Ferrari</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="McLaren"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">McLaren</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Red Bull"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Red Bull Racing</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Mercedes"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Mercedes</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Aston Martin"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Aston Martin</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Alpine"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Alpine</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Williams"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Williams</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Haas"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Haas</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Kick Sauber"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Kick Sauber</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Racing Bulls"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Racing Bulls</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-      </div>
-    </div>
-    <div class="cat-pane" id="pil-f2">
-      <div class="drivers-grid">
-        <div class="driver-card" data-team="Ferrari"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Ferrari</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="McLaren"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">McLaren</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Red Bull"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Red Bull Racing</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Mercedes"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Mercedes</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Aston Martin"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Aston Martin</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Alpine"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Alpine</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Williams"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Williams</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Haas"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Haas</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Kick Sauber"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Kick Sauber</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Racing Bulls"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Racing Bulls</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-      </div>
-    </div>
-    <div class="cat-pane" id="pil-f3">
-      <div class="drivers-grid">
-        <div class="driver-card" data-team="Ferrari"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Ferrari</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="McLaren"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">McLaren</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Red Bull"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Red Bull Racing</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Mercedes"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Mercedes</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Aston Martin"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Aston Martin</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Alpine"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Alpine</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Williams"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Williams</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Haas"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Haas</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Kick Sauber"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Kick Sauber</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-        <div class="driver-card" data-team="Racing Bulls"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Racing Bulls</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
-      </div>
-    </div>
-  </section>
+        <!-- F3 Calendar -->
+        <div class="cat-pane" id="cal-f3">
+            <div class="races-grid">
+                <div class="race-card"><div class="race-round">Round 01</div><div class="race-name">Gran Premio<br>d'Australia</div><div class="race-circuit">Albert Park Circuit</div><div class="race-date">Martedì, 3 Mar 2026 — 21:00</div><div class="race-flag">🇦🇺</div></div>
+                <div class="race-card"><div class="race-round">Round 02</div><div class="race-name">Gran Premio<br>della Cina</div><div class="race-circuit">Shanghai International</div><div class="race-date">Martedì, 17 Mar 2026 — 21:00</div><div class="race-flag">🇨🇳</div></div>
+                <div class="race-card"><div class="race-round">Round 03</div><div class="race-name">Gran Premio<br>del Giappone</div><div class="race-circuit">Suzuka International</div><div class="race-date">Martedì, 31 Mar 2026 — 21:00</div><div class="race-flag">🇯🇵</div></div>
+                <div class="race-card double-pts"><div class="race-round">Round 04</div><div class="race-name">Gran Premio<br>di Bahrain</div><div class="race-circuit">Bahrain International</div><div class="race-date">Martedì, 14 Apr 2026 — 21:00</div><div class="race-flag">🇧🇭</div></div>
+                <div class="race-card next"><div class="race-round">Round 05</div><div class="race-name">Gran Premio<br>di Monaco</div><div class="race-circuit">Circuit de Monaco</div><div class="race-date">Martedì, 5 Mag 2026 — 21:00</div><div class="race-flag">🇲🇨</div></div>
+                <div class="race-card"><div class="race-round">Round 06</div><div class="race-name">Gran Premio<br>di Spagna</div><div class="race-circuit">Circuit de Catalunya</div><div class="race-date">Martedì, 19 Mag 2026 — 21:00</div><div class="race-flag">🇪🇸</div></div>
+                <div class="race-card"><div class="race-round">Round 07</div><div class="race-name">Gran Premio<br>del Canada</div><div class="race-circuit">Circuit Gilles Villeneuve</div><div class="race-date">Martedì, 2 Giu 2026 — 21:00</div><div class="race-flag">🇨🇦</div></div>
+                <div class="race-card"><div class="race-round">Round 08</div><div class="race-name">Gran Premio<br>di Gran Bretagna</div><div class="race-circuit">Silverstone Circuit</div><div class="race-date">Martedì, 30 Giu 2026 — 21:00</div><div class="race-flag">🇬🇧</div></div>
+                <div class="race-card"><div class="race-round">Round 09</div><div class="race-name">Gran Premio<br>d'Ungheria</div><div class="race-circuit">Hungaroring</div><div class="race-date">Martedì, 14 Lug 2026 — 21:00</div><div class="race-flag">🇭🇺</div></div>
+                <div class="race-card"><div class="race-round">Round 10</div><div class="race-name">Gran Premio<br>d'Italia</div><div class="race-circuit">Autodromo di Monza</div><div class="race-date">Martedì, 1 Set 2026 — 21:00</div><div class="race-flag">🇮🇹</div></div>
+                <div class="race-card"><div class="race-round">Round 11</div><div class="race-name">Gran Premio<br>di Abu Dhabi</div><div class="race-circuit">Yas Marina Circuit</div><div class="race-date">Martedì, 24 Nov 2026 — 21:00</div><div class="race-flag">🇦🇪</div></div>
+            </div>
+        </div>
+    </section>
 
-  <!-- TEAM -->
-  <section id="team">
-    <div class="section-label">Costruttori</div>
-    <h2 class="section-title">I Team</h2>
-    <div class="teams-grid">
-      <div class="team-card" style="border-left-color:#e8002d"><div class="team-card-name">Ferrari</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#FF8000"><div class="team-card-name">McLaren</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#3671C6"><div class="team-card-name">Red Bull Racing</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#27F4D2"><div class="team-card-name">Mercedes</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#229971"><div class="team-card-name">Aston Martin</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#FF87BC"><div class="team-card-name">Alpine</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#64C4FF"><div class="team-card-name">Williams</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#B6BABD"><div class="team-card-name">Haas</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#52E252"><div class="team-card-name">Kick Sauber</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-      <div class="team-card" style="border-left-color:#6692FF"><div class="team-card-name">Racing Bulls</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
-    </div>
-  </section>
+    <!-- PILOTI -->
+    <section id="piloti">
+        <div class="section-label">F1 &amp; F2 Stagione 2 · F3 Stagione 1</div>
+        <h2 class="section-title">I Piloti</h2>
+        <div class="cat-tabs">
+            <button class="cat-tab active" data-target="pil-f1">F1 <span class="tab-badge">S2 · VEN 21:00</span></button>
+            <button class="cat-tab" data-target="pil-f2">F2 <span class="tab-badge">S2 · GIO 21:00</span></button>
+            <button class="cat-tab" data-target="pil-f3">F3 <span class="tab-badge">S1 · MAR 21:00</span></button>
+        </div>
+        <div class="cat-pane active" id="pil-f1">
+            <div class="drivers-grid">
+                <div class="driver-card" data-team="Ferrari"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Ferrari</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="McLaren"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">McLaren</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Red Bull"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Red Bull Racing</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Mercedes"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Mercedes</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Aston Martin"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Aston Martin</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Alpine"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Alpine</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Williams"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Williams</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Haas"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Haas</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Kick Sauber"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Kick Sauber</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Racing Bulls"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Racing Bulls</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+            </div>
+        </div>
+        <div class="cat-pane" id="pil-f2">
+            <div class="drivers-grid">
+                <div class="driver-card" data-team="Ferrari"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Ferrari</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="McLaren"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">McLaren</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Red Bull"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Red Bull Racing</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Mercedes"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Mercedes</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Aston Martin"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Aston Martin</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Alpine"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Alpine</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Williams"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Williams</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Haas"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Haas</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Kick Sauber"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Kick Sauber</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Racing Bulls"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Racing Bulls</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+            </div>
+        </div>
+        <div class="cat-pane" id="pil-f3">
+            <div class="drivers-grid">
+                <div class="driver-card" data-team="Ferrari"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Ferrari</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="McLaren"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">McLaren</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Red Bull"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Red Bull Racing</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Mercedes"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Mercedes</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Aston Martin"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Aston Martin</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Alpine"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Alpine</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Williams"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Williams</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Haas"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Haas</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Kick Sauber"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Kick Sauber</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+                <div class="driver-card" data-team="Racing Bulls"><div class="driver-num-bg">?</div><div class="driver-avatar">🏎️</div><div class="t-driver-name">DA AGGIUNGERE</div><div class="t-driver-team">Racing Bulls</div><div class="driver-pts">Punti: <strong>—</strong></div></div>
+            </div>
+        </div>
+    </section>
 
-  <!-- REGOLAMENTO -->
-  <section id="regolamento">
-    <div class="section-label">Regole</div>
-    <h2 class="section-title">Regolamento</h2>
-    <div class="rules-grid">
-      <div class="rule-card"><div class="rule-num">01</div><div class="rule-title">Formato Gara</div><div class="rule-text">Ogni round segue il formato ufficiale F1 25. La griglia di partenza è determinata dalle qualifiche. Dettagli completi in arrivo.</div></div>
-      <div class="rule-card"><div class="rule-num">02</div><div class="rule-title">Categorie</div><div class="rule-text">Il campionato è diviso in tre categorie: F1 (venerdì), F2 (giovedì) e F3 (martedì). Tutte le gare si disputano alle ore 21:00.</div></div>
-      <div class="rule-card"><div class="rule-num">03</div><div class="rule-title">Round Doppi Punti</div><div class="rule-text">Il Round 04 di ogni categoria vale doppi punti per tutti i classificati. Una gara che può stravolgere il campionato.</div></div>
-      <div class="rule-card"><div class="rule-num">04</div><div class="rule-title">Condotta in Pista</div><div class="rule-text">È richiesto rispetto reciproco tra i piloti. Manovre pericolose o comportamenti antisportivi saranno sanzionati dallo staff IRC.</div></div>
-      <div class="rule-card"><div class="rule-num">05</div><div class="rule-title">Punteggio</div><div class="rule-text">Sistema punti ufficiale F1: 25–18–15–12–10–8–6–4–2–1. Punto bonus per il giro veloce se classificati tra i primi 10.</div></div>
-      <div class="rule-card"><div class="rule-num">06</div><div class="rule-title">Comunicazioni</div><div class="rule-text">Tutte le comunicazioni ufficiali, calendari e aggiornamenti vengono pubblicati sul server Discord ufficiale IRC.</div></div>
-    </div>
-  </section>
+    <!-- TEAM -->
+    <section id="team">
+        <div class="section-label">Costruttori</div>
+        <h2 class="section-title">I Team</h2>
+        <div class="teams-grid">
+            <div class="team-card" style="border-left-color:#e8002d"><div class="team-card-name">Ferrari</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#FF8000"><div class="team-card-name">McLaren</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#3671C6"><div class="team-card-name">Red Bull Racing</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#27F4D2"><div class="team-card-name">Mercedes</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#229971"><div class="team-card-name">Aston Martin</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#FF87BC"><div class="team-card-name">Alpine</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#64C4FF"><div class="team-card-name">Williams</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#B6BABD"><div class="team-card-name">Haas</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#52E252"><div class="team-card-name">Kick Sauber</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+            <div class="team-card" style="border-left-color:#6692FF"><div class="team-card-name">Racing Bulls</div><div class="team-card-drivers">Piloti da assegnare</div><div class="team-pts-row">Punti Costruttori: —</div></div>
+        </div>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div>
-      <img src="logo-compact.png" alt="IRC" style="height:38px;object-fit:contain;margin-bottom:.5rem;display:block;">
-      <p class="footer-copy">Campionato Online F1 25 — Stagione 2026</p>
-    </div>
-    <div class="tricolore"></div>
-    <p class="footer-copy">Fatto con passione per le corse 🇮🇹</p>
-  </footer>
+    <!-- REGOLAMENTO -->
+    <section id="regolamento">
+        <div class="section-label">Regole</div>
+        <h2 class="section-title">Regolamento</h2>
+        <div class="rules-grid">
+            <div class="rule-card"><div class="rule-num">01</div><div class="rule-title">Formato Gara</div><div class="rule-text">Ogni round segue il formato ufficiale F1 25. La griglia di partenza è determinata dalle qualifiche. Dettagli completi in arrivo.</div></div>
+            <div class="rule-card"><div class="rule-num">02</div><div class="rule-title">Categorie</div><div class="rule-text">Il campionato è diviso in tre categorie: F1 (venerdì), F2 (giovedì) e F3 (martedì). Tutte le gare si disputano alle ore 21:00.</div></div>
+            <div class="rule-card"><div class="rule-num">03</div><div class="rule-title">Round Doppi Punti</div><div class="rule-text">Il Round 04 di ogni categoria vale doppi punti per tutti i classificati. Una gara che può stravolgere il campionato.</div></div>
+            <div class="rule-card"><div class="rule-num">04</div><div class="rule-title">Condotta in Pista</div><div class="rule-text">È richiesto rispetto reciproco tra i piloti. Manovre pericolose o comportamenti antisportivi saranno sanzionati dallo staff IRC.</div></div>
+            <div class="rule-card"><div class="rule-num">05</div><div class="rule-title">Punteggio</div><div class="rule-text">Sistema punti ufficiale F1: 25–18–15–12–10–8–6–4–2–1. Punto bonus per il giro veloce se classificati tra i primi 10.</div></div>
+            <div class="rule-card"><div class="rule-num">06</div><div class="rule-title">Comunicazioni</div><div class="rule-text">Tutte le comunicazioni ufficiali, calendari e aggiornamenti vengono pubblicati sul server Discord ufficiale IRC.</div></div>
+        </div>
+    </section>
 
-  <script>
-    // Hamburger
-    const hamburger = document.getElementById('hamburger');
-    const navLinks  = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
-    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+    <!-- FOOTER -->
+    <footer>
+        <div>
+            <img src="IRC_completo_white.png" alt="IRC" style="height:38px;object-fit:contain;margin-bottom:.5rem;display:block;">
+            <p class="footer-copy">Campionato Online F1 25 — Stagione 2026</p>
+        </div>
+        <div class="tricolore"></div>
+        <p class="footer-copy">Fatto con passione per le corse 🇮🇹</p>
+    </footer>
 
-    // Navbar shadow
-    window.addEventListener('scroll', () => {
-      document.getElementById('navbar').style.boxShadow = window.scrollY > 10 ? '0 4px 24px rgba(0,0,0,.4)' : 'none';
-    });
+    <script>
+        // Hamburger
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+        navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
 
-    // Tab switching — works for all sections independently
-    document.querySelectorAll('.cat-tabs').forEach(tabGroup => {
-      tabGroup.querySelectorAll('.cat-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-          // Deactivate all tabs in this group
-          tabGroup.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          // Find the parent section and toggle panes within it
-          const section = tabGroup.closest('section');
-          const targetId = tab.getAttribute('data-target');
-          section.querySelectorAll('.cat-pane').forEach(pane => {
-            pane.classList.toggle('active', pane.id === targetId);
-          });
+        // Navbar shadow
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').style.boxShadow = window.scrollY > 10 ? '0 4px 24px rgba(0,0,0,.4)' : 'none';
         });
-      });
-    });
 
-    // Scroll fade-in
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
-      });
-    }, { threshold: 0.06 });
-    document.querySelectorAll('.race-card, .driver-card, .team-card, .rule-card, .standings-table tbody tr').forEach(el => {
-      el.style.opacity = '0'; el.style.transform = 'translateY(18px)'; el.style.transition = 'opacity .5s ease, transform .5s ease';
-      observer.observe(el);
-    });
-  </script>
+        // Tab switching — works for all sections independently
+        document.querySelectorAll('.cat-tabs').forEach(tabGroup => {
+            tabGroup.querySelectorAll('.cat-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Deactivate all tabs in this group
+                    tabGroup.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    // Find the parent section and toggle panes within it
+                    const section = tabGroup.closest('section');
+                    const targetId = tab.getAttribute('data-target');
+                    section.querySelectorAll('.cat-pane').forEach(pane => {
+                        pane.classList.toggle('active', pane.id === targetId);
+                    });
+                });
+            });
+        });
+
+        // Scroll fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+            });
+        }, { threshold: 0.06 });
+        document.querySelectorAll('.race-card, .driver-card, .team-card, .rule-card, .standings-table tbody tr').forEach(el => {
+            el.style.opacity = '0'; el.style.transform = 'translateY(18px)'; el.style.transition = 'opacity .5s ease, transform .5s ease';
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>
